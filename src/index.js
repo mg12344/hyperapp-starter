@@ -1,22 +1,25 @@
 import { app } from 'hyperapp'
-import { main, h1, div, button } from '@hyperapp/html'
+import { main, h1, div, button,ul,li,input } from '@hyperapp/html'
 
 app({
   state: {
-    count: 0,
+    input:'',
+list:['Tom','Will','Madalina']
   },
   actions: {
     reset: () => ({ count: 0 }),
-    add: state => ({ count: state.count + 1 }),
-    sub: state => ({ count: state.count - 1 }),
+    updateInput:(state, actions, character)=>({input:state.input + character}),
+    addItem:(state)=>({list:state.list.concat ([state.input]) }),
   },
   view: (state, actions) =>
     main([
-      h1(state.count),
       div([
-        button({ onclick: actions.sub }, 'Sub'),
-        button({ onclick: actions.reset }, 'Reset'),
-        button({ onclick: actions.add }, 'Add'),
+      button({ onclick: actions.reset }, 'Reset'),
+      button ({onclick:actions.addItem}, 'Add'),
       ]),
+      input({ oninput: (character) => (actions.updateInput(character.data)) }),
+      ul([
+        state.list.map((item) =>li([item]))
+      ])
     ]),
 })
